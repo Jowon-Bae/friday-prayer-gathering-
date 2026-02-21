@@ -1,0 +1,80 @@
+.splash-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-color, #121212);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-out;
+    color: white;
+}
+
+.splash-fade {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.splash-logo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.splash-logo {
+    width: 54px;
+    /* Reduced to 60% of previous 90px size */
+    height: auto;
+    /* Spin 2 times in 3 seconds (slower rotation) */
+    animation: spinTwoTimes 3s ease-in-out forwards;
+    /* Add invert(1) to make original black logo white for dark mode */
+    filter: invert(1);
+    transition: filter 0.3s ease-out, transform 0.3s ease-out;
+}
+
+/*
+  The flash effect triggers after the spin.
+  It heavily increases brightness and scales the logo slightly.
+  Must preserve invert(1) inside this filter sequence!
+*/
+.splash-flash {
+    filter: invert(1) drop-shadow(0 0 40px rgba(255, 255, 255, 1)) brightness(2.5);
+    transform: scale(1.1);
+}
+
+.splash-title {
+    text-align: center;
+    font-size: 0.9rem;
+    /* Reduced to 60% of original 1.5rem size */
+    letter-spacing: 2px;
+    animation: fadeIn 1s ease-in forwards;
+    opacity: 0;
+}
+
+@keyframes spinTwoTimes {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(720deg);
+    }
+
+    /* 2 full rotations */
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

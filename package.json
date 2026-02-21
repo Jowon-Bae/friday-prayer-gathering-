@@ -1,0 +1,11 @@
+{
+    "name": "fractal-comet-production",
+    "version": "1.0.0",
+    "description": "BPM & Cue Sync App",
+    "main": "server/index.js",
+    "scripts": {
+        "postinstall": "cd client && npm install && cd ../server && npm install",
+        "build": "cd client && npm run build",
+        "start": "cd server && npm start"
+    }
+}
