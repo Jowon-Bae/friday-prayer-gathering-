@@ -139,7 +139,7 @@ export default function Master() {
                 ) : null}
             </div>
 
-            <div className="tempo-control" style={{ position: 'relative', paddingTop: '15px' }}>
+            <div className="tempo-control" style={{ position: 'relative', paddingTop: '35px', paddingBottom: '10px' }}>
                 <div className={`connection-status ${isConnected ? 'status-connected' : 'status-disconnected'}`} style={{ position: 'absolute', top: '5px', right: '10px', fontSize: '0.7rem' }}>
                     {isConnected ? 'ONLINE' : 'OFFLINE'}
                 </div>
