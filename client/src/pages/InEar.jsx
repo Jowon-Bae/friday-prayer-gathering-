@@ -100,17 +100,17 @@ export default function InEar() {
     const hasInEarAdj = vol !== 0;
 
     return (
-        <div className="master-container" style={{ padding: '1rem', overflowY: 'auto' }}>
+        <div className="master-container" style={{ padding: '1rem', paddingTop: 'max(50px, env(safe-area-inset-top))', overflowY: 'auto' }}>
             <div className={`connection-status ${isConnected ? 'status-connected' : 'status-disconnected'}`}>
                 {isConnected ? 'ONLINE' : 'OFFLINE'}
             </div>
 
-            <h1 style={{ textAlign: 'center', margin: '0.5rem 0 0.5rem', fontSize: '1.5rem' }}>인이어(In-Ear) 조정</h1>
+            <h1 style={{ textAlign: 'center', margin: '0 0 1rem 0', fontSize: '1.5rem' }}>인이어(In-Ear) 조정</h1>
 
             {/* PREVIEW BOX */}
             <div style={{
                 backgroundColor: memberState.current_color || '#121212',
-                border: '2px dashed #666',
+                border: '2px solid #666',
                 borderRadius: '8px',
                 padding: '0.5rem 1rem 1rem',
                 marginBottom: '1.5rem',
