@@ -127,7 +127,7 @@ export default function Master() {
                 <input
                     type="text"
                     className="song-input"
-                    placeholder="예: 434"
+                    placeholder="예: 77"
                     value={songNum}
                     onChange={handleSongChange}
                     style={{ fontSize: '1.2rem', padding: '4px 8px', width: '120px' }}
@@ -139,38 +139,37 @@ export default function Master() {
                 ) : null}
             </div>
 
-            <div className="tempo-control" style={{ position: 'relative' }}>
+            <div className="tempo-control" style={{ position: 'relative', paddingTop: '15px' }}>
                 <div className={`connection-status ${isConnected ? 'status-connected' : 'status-disconnected'}`} style={{ position: 'absolute', top: '5px', right: '10px', fontSize: '0.7rem' }}>
                     {isConnected ? 'ONLINE' : 'OFFLINE'}
                 </div>
-                <div className="tempo-column">
-                    <button className="tempo-btn" onClick={() => changeBpm(-10)}>-10</button>
-                    <button
-                        className="tempo-btn tempo-btn-main"
-                        onMouseDown={() => startHold(-1)}
-                        onMouseUp={stopHold}
-                        onMouseLeave={stopHold}
-                        onTouchStart={(e) => { e.preventDefault(); startHold(-1); }}
-                        onTouchEnd={(e) => { e.preventDefault(); stopHold(); }}
-                    >-1</button>
-                </div>
 
-                <div className="tempo-display">
+                <button className="tempo-btn" onClick={() => changeBpm(-10)}>-10</button>
+
+                <button
+                    className="tempo-btn tempo-btn-main"
+                    onMouseDown={() => startHold(-1)}
+                    onMouseUp={stopHold}
+                    onMouseLeave={stopHold}
+                    onTouchStart={(e) => { e.preventDefault(); startHold(-1); }}
+                    onTouchEnd={(e) => { e.preventDefault(); stopHold(); }}
+                >-1</button>
+
+                <div className="tempo-display" style={{ margin: '0 5px' }}>
                     <span className="tempo-label">TEMPO</span>
                     <span className="tempo-number">{bpm}</span>
                 </div>
 
-                <div className="tempo-column">
-                    <button className="tempo-btn" onClick={() => changeBpm(10)}>+10</button>
-                    <button
-                        className="tempo-btn tempo-btn-main"
-                        onMouseDown={() => startHold(1)}
-                        onMouseUp={stopHold}
-                        onMouseLeave={stopHold}
-                        onTouchStart={(e) => { e.preventDefault(); startHold(1); }}
-                        onTouchEnd={(e) => { e.preventDefault(); stopHold(); }}
-                    >+1</button>
-                </div>
+                <button
+                    className="tempo-btn tempo-btn-main"
+                    onMouseDown={() => startHold(1)}
+                    onMouseUp={stopHold}
+                    onMouseLeave={stopHold}
+                    onTouchStart={(e) => { e.preventDefault(); startHold(1); }}
+                    onTouchEnd={(e) => { e.preventDefault(); stopHold(); }}
+                >+1</button>
+
+                <button className="tempo-btn" onClick={() => changeBpm(10)}>+10</button>
             </div>
 
             <div className="cue-grid">
