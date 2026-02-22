@@ -28,13 +28,34 @@ const cueLabelMap = {
     'KG': 'G key'
 };
 
+const inearTargetMap = {
+    'WL': '예배인도자',
+    'CLICK': '클릭',
+    'SINGER': '싱어',
+    'PRAY': '기도인도자',
+    'PREACH': '설교자',
+    'KEYMAIN': '메인 건반',
+    'KEY21': '세컨1 건반',
+    'KEY22': '세컨2 건반',
+    'DRUM': '드럼',
+    'BASS': '베이스',
+    'ELEC': '일렉'
+};
+
+const inearAdjMap = {
+    'UP': '+1',
+    'DOWN': '-1'
+};
+
 export default function Member() {
     const [state, setState] = useState({
         current_bpm: 70, // matches new default
         current_cue: 'WAIT',
         current_key: '',
         current_modifiers: [],
-        current_color: '#121212'
+        current_color: '#121212',
+        current_inear_targets: [],
+        current_inear_modifiers: []
     });
     const [isConnected, setIsConnected] = useState(socket.connected);
 
@@ -66,11 +87,14 @@ export default function Member() {
     };
 
     const hasModifiers = state.current_modifiers && state.current_modifiers.length > 0;
+    const hasInEarTargets = state.current_inear_targets && state.current_inear_targets.length > 0;
+    const hasInEarAdj = state.current_inear_modifiers && state.current_inear_modifiers.length > 0;
+    const isWaiting = !displayCue && !displayKey && !hasModifiers;
 
     return (
         <div
             className="member-container"
-            style={{ backgroundColor: state.current_color }}
+            style={{ backgroundColor: state.current_color, paddingBottom: '2rem' }}
         >
             <div className={`connection-status ${isConnected ? 'status-connected' : 'status-disconnected'}`}>
                 {isConnected ? 'LIVE' : 'RECONNECTING...'}
@@ -89,10 +113,28 @@ export default function Member() {
                 {hasModifiers && state.current_modifiers.map(mod => (
                     <div key={mod} className="member-cue text-outline-black">{modifierLabelMap[mod] || mod}</div>
                 ))}
-                {!displayCue && !displayKey && !hasModifiers && <div className="member-cue">WAIT</div>}
+                {isWaiting && <div className="member-cue">WAIT</div>}
             </div>
 
-            <div className="member-label">BPM</div>
+            {(hasInEarTargets || hasInEarAdj) && (
+                <div className="member-cues-container" style={{ marginTop: '1.5rem', backgroundColor: 'rgba(50,50,50,0.5)', borderColor: '#555', minHeight: 'auto', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
+                    <div style={{ color: '#aaa', fontSize: '1.2rem', marginBottom: '1rem', letterSpacing: '2px', fontWeight: 'bold' }}>IN-EAR CONTROL</div>
+
+                    {hasInEarTargets && state.current_inear_targets.map(tId => (
+                        <div key={tId} className="member-cue" style={{ backgroundColor: '#2a2a2a', fontSize: '1.8rem', padding: '0.8rem 1.5rem' }}>
+                            {inearTargetMap[tId] || tId}
+                        </div>
+                    ))}
+
+                    {hasInEarAdj && state.current_inear_modifiers.map(aId => (
+                        <div key={aId} className="member-cue" style={{ backgroundColor: aId === 'UP' ? '#d32f2f' : '#1976d2', fontSize: '2rem', padding: '1rem 2rem' }}>
+                            {inearAdjMap[aId] || aId}
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            <div className="member-label" style={{ marginTop: '2rem' }}>BPM</div>
             <div className="member-bpm">{state.current_bpm}</div>
         </div>
     );
