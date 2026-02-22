@@ -125,7 +125,7 @@ export default function Master() {
     return (
         <div className="master-container" style={{ paddingTop: 'max(50px, env(safe-area-inset-top))' }}>
             <div className="song-control">
-                <span className="song-label" style={{ fontSize: '1rem' }}>곡 번호 입력:</span>
+                <span className="song-label" style={{ fontSize: '1rem' }}>Song No.</span>
                 <input
                     type="text"
                     className="song-input"
