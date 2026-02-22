@@ -10,20 +10,20 @@ export default function SplashScreen({ onComplete }) {
             setStage('flashing');
         }, 3000);
 
-        // 2. Flash effect lasts for 0.5s, then disappears
+        // 2. Flash effect slowly builds up and then we wait 1s before taking it away
         const flashEndTimer = setTimeout(() => {
             setStage('done-flashing');
-        }, 3500);
+        }, 4000);
 
-        // 3. Wait 0.5s with normal logo, then start fading splash screen
+        // 3. Wait 1s for the flash to smoothly dissolve back to normal, then fade screen
         const fadeTimer = setTimeout(() => {
             setStage('fading');
-        }, 4000);
+        }, 5000);
 
         // 4. Fading finishes after 0.5s, unmount
         const removeTimer = setTimeout(() => {
             onComplete();
-        }, 4500);
+        }, 5500);
 
         return () => {
             clearTimeout(flashTimer);
