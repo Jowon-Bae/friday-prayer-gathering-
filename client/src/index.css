@@ -146,8 +146,9 @@ body {
 
 .tempo-column {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
 }
 
 .tempo-btn {
@@ -155,9 +156,9 @@ body {
   color: white;
   border: none;
   border-radius: 8px;
-  width: 50px;
-  height: 40px;
-  font-size: 1rem;
+  width: 45px;
+  height: 45px;
+  font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.1s;
@@ -174,7 +175,8 @@ body {
 }
 
 .tempo-btn-main {
-  height: 60px;
+  height: 55px;
+  width: 55px;
   background: #555;
   font-size: 1.5rem;
 }
@@ -206,7 +208,7 @@ body {
   display: grid;
   /* Make it 3 columns to fit 14 buttons nicely */
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+  gap: 4px;
   padding: 4px;
   overflow-y: auto;
   /* Allow wrap/scroll if screen is small */
@@ -235,7 +237,7 @@ body {
   grid-column: 1 / -1;
   height: 2px;
   background-color: #333;
-  margin: 4px 0;
+  margin: -2px 0;
   border-radius: 2px;
 }
 
