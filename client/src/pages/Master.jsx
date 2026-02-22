@@ -121,28 +121,28 @@ export default function Master() {
     };
 
     return (
-        <div className="master-container">
-            <div className={`connection-status ${isConnected ? 'status-connected' : 'status-disconnected'}`}>
-                {isConnected ? 'ONLINE' : 'OFFLINE'}
-            </div>
-
+        <div className="master-container" style={{ paddingTop: 'max(50px, env(safe-area-inset-top))' }}>
             <div className="song-control">
-                <span className="song-label">곡 번호 입력:</span>
+                <span className="song-label" style={{ fontSize: '1rem' }}>곡 번호 입력:</span>
                 <input
                     type="text"
                     className="song-input"
                     placeholder="예: 434"
                     value={songNum}
                     onChange={handleSongChange}
+                    style={{ fontSize: '1.2rem', padding: '4px 8px', width: '120px' }}
                 />
                 {songMap[songNum] || songMap[parseInt(songNum, 10)] ? (
-                    <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white', marginLeft: '10px' }}>
+                    <span style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white', marginLeft: '5px' }}>
                         {songMap[songNum] || songMap[parseInt(songNum, 10)]}
                     </span>
                 ) : null}
             </div>
 
-            <div className="tempo-control">
+            <div className="tempo-control" style={{ position: 'relative' }}>
+                <div className={`connection-status ${isConnected ? 'status-connected' : 'status-disconnected'}`} style={{ position: 'absolute', top: '5px', right: '10px', fontSize: '0.7rem' }}>
+                    {isConnected ? 'ONLINE' : 'OFFLINE'}
+                </div>
                 <div className="tempo-column">
                     <button className="tempo-btn" onClick={() => changeBpm(-10)}>-10</button>
                     <button
@@ -182,7 +182,7 @@ export default function Master() {
                             backgroundColor: kCue.color,
                             opacity: activeKey === kCue.id ? 1 : 0.6,
                             border: activeKey === kCue.id ? '4px solid white' : 'none',
-                            fontSize: '1.8rem',
+                            fontSize: '1.4rem',
                             whiteSpace: 'pre-line'
                         }}
                         onClick={() => selectKey(kCue.id)}
@@ -201,7 +201,7 @@ export default function Master() {
                             backgroundColor: sec.color,
                             opacity: activeSection === sec.id ? 1 : 0.6,
                             border: activeSection === sec.id ? '4px solid white' : 'none',
-                            fontSize: '1.8rem',
+                            fontSize: '1.4rem',
                             whiteSpace: 'pre-line'
                         }}
                         onClick={() => selectSection(sec.id, sec.color)}
@@ -220,7 +220,7 @@ export default function Master() {
                             backgroundColor: mod.color,
                             opacity: activeModifiers.includes(mod.id) ? 1 : 0.6,
                             border: activeModifiers.includes(mod.id) ? '4px solid white' : 'none',
-                            fontSize: '1.8rem',
+                            fontSize: '1.4rem',
                             whiteSpace: 'pre-line'
                         }}
                         onClick={() => toggleModifier(mod.id)}
@@ -237,8 +237,8 @@ export default function Master() {
                         style={{
                             backgroundColor: '#2a2a2a',
                             width: '100%',
-                            fontSize: '1.5rem',
-                            padding: '1rem',
+                            fontSize: '1.2rem',
+                            padding: '0.5rem',
                             border: '2px solid #444',
                         }}
                         onClick={() => navigate('/inear')}
