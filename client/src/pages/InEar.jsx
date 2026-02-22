@@ -148,21 +148,21 @@ export default function InEar() {
 
                         {hasInEarTargets && (
                             <>
-                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '5px', color: 'white' }}>제 인이어에</div>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '5px' }}>
+                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '2px', color: 'white' }}>제 인이어에</div>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2px' }}>
                                     {targets.map(tId => (
                                         <div key={tId} style={{ backgroundColor: 'transparent', color: '#111', padding: '0', borderRadius: '4px', fontSize: '1.5rem', fontWeight: 'bold' }}>
                                             {inearTargetMap[tId] || tId}
                                         </div>
                                     ))}
                                 </div>
-                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '5px', marginBottom: '5px', color: 'white' }}>소리를</div>
+                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '2px', marginBottom: '5px', color: 'white' }}>소리를</div>
                             </>
                         )}
 
                         {hasInEarAdj && (
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <div style={{ backgroundColor: 'transparent', color: vol > 0 ? '#d32f2f' : '#1976d2', padding: '0', borderRadius: '4px', fontSize: '2rem', fontWeight: 'bold', display: 'inline-block', marginBottom: '5px' }}>
+                                <div style={{ backgroundColor: 'transparent', color: vol > 0 ? '#d32f2f' : '#1976d2', padding: '0', borderRadius: '4px', fontSize: '2rem', fontWeight: 'bold', display: 'inline-block', marginBottom: '2px' }}>
                                     {vol > 0 ? `+${vol}` : vol}
                                 </div>
                                 <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'white' }}>
