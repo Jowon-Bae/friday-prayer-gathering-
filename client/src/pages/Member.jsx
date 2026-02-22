@@ -122,26 +122,26 @@ export default function Member() {
             </div>
 
             {(hasInEarTargets || hasInEarAdj) && (
-                <div className="member-cues-container" style={{ marginTop: '1.5rem', backgroundColor: 'rgba(50,50,50,0.5)', borderColor: '#555', minHeight: 'auto', paddingTop: '1.5rem', paddingBottom: '1.5rem', width: '90%', maxWidth: '600px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <div style={{ color: '#aaa', fontSize: '1.5rem', marginBottom: '1rem', letterSpacing: '2px', fontWeight: 'bold' }}>IN-EAR CONTROL</div>
+                <div className="member-cues-container" style={{ marginTop: '0.5rem', backgroundColor: 'rgba(50,50,50,0.5)', borderColor: '#555', minHeight: 'auto', paddingTop: '0.5rem', paddingBottom: '0.5rem', width: '90%', maxWidth: '600px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ color: '#aaa', fontSize: '1.2rem', marginBottom: '0.5rem', letterSpacing: '2px', fontWeight: 'bold' }}>IN-EAR CONTROL</div>
 
                     {hasInEarTargets && (
                         <>
-                            <div style={{ fontSize: '1.6rem', fontWeight: 'bold', marginBottom: '2px', color: 'white' }}>제 인이어에</div>
+                            <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '2px', color: 'white' }}>제 인이어에</div>
                             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2px' }}>
                                 {state.current_inear_targets.map(tId => (
-                                    <div key={tId} className="member-cue" style={{ backgroundColor: 'transparent', color: '#111', fontSize: '2.5rem', padding: '0.1rem 1rem', margin: '0' }}>
+                                    <div key={tId} className="member-cue" style={{ backgroundColor: 'transparent', color: '#111', fontSize: '2rem', padding: '0 0.5rem', margin: '0' }}>
                                         {inearTargetMap[tId] || tId}
                                     </div>
                                 ))}
                             </div>
-                            <div style={{ fontSize: '1.6rem', fontWeight: 'bold', marginTop: '2px', marginBottom: '5px', color: 'white' }}>소리를</div>
+                            <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginTop: '2px', marginBottom: '2px', color: 'white' }}>소리를</div>
                         </>
                     )}
 
                     {hasInEarAdj && (
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <div className="member-cue" style={{ backgroundColor: 'transparent', color: state.current_inear_vol > 0 ? '#d32f2f' : '#1976d2', fontSize: '3.5rem', padding: '0.1rem 1rem', margin: '0 0 5px 0' }}>
+                            <div className="member-cue" style={{ backgroundColor: 'transparent', color: state.current_inear_vol > 0 ? '#d32f2f' : '#1976d2', fontSize: '2.5rem', padding: '0 0.5rem', margin: '0 0 2px 0' }}>
                                 {state.current_inear_vol > 0 ? `+${state.current_inear_vol}` : state.current_inear_vol}
                             </div>
                             <div style={{ fontSize: '1.6rem', fontWeight: 'bold', color: 'white' }}>
