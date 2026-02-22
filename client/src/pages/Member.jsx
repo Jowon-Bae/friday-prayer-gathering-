@@ -42,11 +42,6 @@ const inearTargetMap = {
     'ELEC': '일렉'
 };
 
-const inearAdjMap = {
-    'UP': '+1',
-    'DOWN': '-1'
-};
-
 export default function Member() {
     const [state, setState] = useState({
         current_bpm: 70, // matches new default
@@ -55,7 +50,7 @@ export default function Member() {
         current_modifiers: [],
         current_color: '#121212',
         current_inear_targets: [],
-        current_inear_modifiers: []
+        current_inear_vol: 0
     });
     const [isConnected, setIsConnected] = useState(socket.connected);
 
@@ -88,7 +83,7 @@ export default function Member() {
 
     const hasModifiers = state.current_modifiers && state.current_modifiers.length > 0;
     const hasInEarTargets = state.current_inear_targets && state.current_inear_targets.length > 0;
-    const hasInEarAdj = state.current_inear_modifiers && state.current_inear_modifiers.length > 0;
+    const hasInEarAdj = state.current_inear_vol !== 0;
     const isWaiting = !displayCue && !displayKey && !hasModifiers;
 
     return (
@@ -117,20 +112,20 @@ export default function Member() {
             </div>
 
             {(hasInEarTargets || hasInEarAdj) && (
-                <div className="member-cues-container" style={{ marginTop: '1.5rem', backgroundColor: 'rgba(50,50,50,0.5)', borderColor: '#555', minHeight: 'auto', paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
-                    <div style={{ color: '#aaa', fontSize: '1.2rem', marginBottom: '1rem', letterSpacing: '2px', fontWeight: 'bold' }}>IN-EAR CONTROL</div>
+                <div className="member-cues-container" style={{ marginTop: '1.5rem', backgroundColor: 'rgba(50,50,50,0.5)', borderColor: '#555', minHeight: 'auto', paddingTop: '1.5rem', paddingBottom: '1.5rem', width: '90%', maxWidth: '600px' }}>
+                    <div style={{ color: '#aaa', fontSize: '1.8rem', fontFamily: 'cursive', marginBottom: '1rem', fontWeight: 'bold' }}>In Ear Control</div>
 
                     {hasInEarTargets && state.current_inear_targets.map(tId => (
-                        <div key={tId} className="member-cue" style={{ backgroundColor: '#2a2a2a', fontSize: '1.8rem', padding: '0.8rem 1.5rem' }}>
+                        <div key={tId} className="member-cue" style={{ backgroundColor: '#2a2a2a', fontSize: '1.8rem', padding: '0.8rem 1.5rem', margin: '0.3rem' }}>
                             {inearTargetMap[tId] || tId}
                         </div>
                     ))}
 
-                    {hasInEarAdj && state.current_inear_modifiers.map(aId => (
-                        <div key={aId} className="member-cue" style={{ backgroundColor: aId === 'UP' ? '#d32f2f' : '#1976d2', fontSize: '2rem', padding: '1rem 2rem' }}>
-                            {inearAdjMap[aId] || aId}
+                    {hasInEarAdj && (
+                        <div className="member-cue" style={{ backgroundColor: state.current_inear_vol > 0 ? '#d32f2f' : '#1976d2', fontSize: '2.5rem', padding: '1rem 2rem', margin: '0.5rem' }}>
+                            {state.current_inear_vol > 0 ? `+${state.current_inear_vol}` : state.current_inear_vol}
                         </div>
-                    ))}
+                    )}
                 </div>
             )}
 

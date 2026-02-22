@@ -26,23 +26,29 @@ const inearTargets = [
     { id: 'ELEC', label: '일렉', color: '#1f1f1f' }
 ];
 
-const inearAdjustments = [
-    { id: 'UP', label: '+1', color: '#d32f2f' },
-    { id: 'DOWN', label: '-1', color: '#1976d2' }
-];
-
 export default function InEar() {
     const navigate = useNavigate();
     const [targets, setTargets] = useState([]);
-    const [adjustments, setAdjustments] = useState([]);
+    const [vol, setVol] = useState(0);
     const [isConnected, setIsConnected] = useState(socket.connected);
+
+    // To show preview, we also listen to member state
+    const [memberState, setMemberState] = useState({
+        current_bpm: 70,
+        current_cue: 'WAIT',
+        current_key: '',
+        current_modifiers: [],
+        current_color: '#121212',
+        current_song: ''
+    });
 
     useEffect(() => {
         socket.on('connect', () => setIsConnected(true));
         socket.on('disconnect', () => setIsConnected(false));
         socket.on('state_update', (state) => {
             if (state.current_inear_targets !== undefined) setTargets(state.current_inear_targets);
-            if (state.current_inear_modifiers !== undefined) setAdjustments(state.current_inear_modifiers);
+            if (state.current_inear_vol !== undefined) setVol(state.current_inear_vol);
+            setMemberState(prev => ({ ...prev, ...state }));
         });
 
         return () => {
@@ -60,19 +66,37 @@ export default function InEar() {
         });
     };
 
-    const toggleAdjustment = (aId) => {
-        setAdjustments(prev => {
-            const next = prev.includes(aId) ? prev.filter(x => x !== aId) : [...prev, aId];
-            socket.emit('update_state', { current_inear_modifiers: next });
+    const changeVol = (delta) => {
+        setVol(prev => {
+            const next = prev + delta;
+            socket.emit('update_state', { current_inear_vol: next });
             return next;
         });
     };
 
     const clearInEar = () => {
         setTargets([]);
-        setAdjustments([]);
-        socket.emit('update_state', { current_inear_targets: [], current_inear_modifiers: [] });
+        setVol(0);
+        socket.emit('update_state', { current_inear_targets: [], current_inear_vol: 0 });
     };
+
+    const handleReturn = () => {
+        clearInEar();
+        navigate('/master');
+    };
+
+    // Derived values for preview
+    const cueLabelMap = { 'V1': 'Verse 1', 'V2': 'Verse 2', 'CH': 'Chorus', 'BR': 'Bridge', 'INST': 'Instrument', 'END': 'Ending', 'BR2': 'Bridge 한 번 더', 'KA': 'A key', 'KBb': 'Bb key', 'KC': 'C key', 'KD': 'D key', 'KE': 'E key', 'KF': 'F key', 'KG': 'G key' };
+    const modifierLabelMap = { 'ONEMORE': '한 번 더', 'KEYUP': 'Key up' };
+
+    const displayCue = memberState.current_cue && memberState.current_cue !== 'WAIT' ? (cueLabelMap[memberState.current_cue] || memberState.current_cue) : '';
+    const displayKey = memberState.current_key ? (cueLabelMap[memberState.current_key] || memberState.current_key) : '';
+    const hasModifiers = memberState.current_modifiers && memberState.current_modifiers.length > 0;
+    const isWaiting = !displayCue && !displayKey && !hasModifiers;
+
+    const inearTargetMap = { 'WL': '예배인도자', 'CLICK': '클릭', 'SINGER': '싱어', 'PRAY': '기도인도자', 'PREACH': '설교자', 'KEYMAIN': '메인 건반', 'KEY21': '세컨1 건반', 'KEY22': '세컨2 건반', 'DRUM': '드럼', 'BASS': '베이스', 'ELEC': '일렉' };
+    const hasInEarTargets = targets && targets.length > 0;
+    const hasInEarAdj = vol !== 0;
 
     return (
         <div className="master-container" style={{ padding: '1rem', overflowY: 'auto' }}>
@@ -80,7 +104,50 @@ export default function InEar() {
                 {isConnected ? 'ONLINE' : 'OFFLINE'}
             </div>
 
-            <h1 style={{ textAlign: 'center', margin: '0.5rem 0 1.5rem', fontSize: '1.5rem' }}>인이어(In-Ear) 조정</h1>
+            <h1 style={{ textAlign: 'center', margin: '0.5rem 0 0.5rem', fontSize: '1.5rem' }}>인이어(In-Ear) 조정</h1>
+
+            {/* PREVIEW BOX */}
+            <div style={{
+                backgroundColor: memberState.current_color || '#121212',
+                border: '2px dashed #666',
+                borderRadius: '8px',
+                padding: '0.5rem 1rem 1rem',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                position: 'relative',
+                minHeight: '150px'
+            }}>
+                <div style={{ position: 'absolute', top: '-10px', left: '10px', backgroundColor: '#333', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>화면 미리보기</div>
+
+                {memberState.current_song && (
+                    <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', opacity: 0.8 }}>SONG NO. {memberState.current_song}</div>
+                )}
+
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', marginTop: '10px' }}>
+                    {displayKey && <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{displayKey}</div>}
+                    {displayCue && <div style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>{displayCue}</div>}
+                    {hasModifiers && memberState.current_modifiers.map(mod => (
+                        <div key={mod} style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#ffeb3b' }}>{modifierLabelMap[mod] || mod}</div>
+                    ))}
+                    {isWaiting && <div style={{ fontSize: '1.2rem', opacity: 0.6 }}>WAIT</div>}
+                </div>
+
+                {(hasInEarTargets || hasInEarAdj) && (
+                    <div style={{ marginTop: '10px', backgroundColor: 'rgba(50,50,50,0.5)', width: '90%', padding: '10px', borderRadius: '8px', textAlign: 'center' }}>
+                        <div style={{ color: '#aaa', fontSize: '1.2rem', fontFamily: 'cursive', marginBottom: '8px', fontWeight: 'bold' }}>In Ear Control</div>
+                        {hasInEarTargets && targets.map(tId => (
+                            <div key={tId} style={{ backgroundColor: '#2a2a2a', padding: '5px 10px', marginBottom: '5px', borderRadius: '4px', fontSize: '1.2rem', fontWeight: 'bold' }}>{inearTargetMap[tId] || tId}</div>
+                        ))}
+                        {hasInEarAdj && (
+                            <div style={{ backgroundColor: vol > 0 ? '#d32f2f' : '#1976d2', padding: '8px 10px', borderRadius: '4px', fontSize: '1.5rem', fontWeight: 'bold', display: 'inline-block', marginTop: '5px' }}>
+                                {vol > 0 ? `+${vol}` : vol}
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
 
             <div className="cue-grid">
                 {inearTargets.map(t => (
@@ -101,22 +168,36 @@ export default function InEar() {
 
                 <div className="cue-divider"></div>
 
-                {inearAdjustments.map(a => (
+                <div style={{ display: 'flex', gap: '1rem', gridColumn: '1 / -1' }}>
                     <button
-                        key={a.id}
                         className="cue-btn"
                         style={{
-                            backgroundColor: a.color,
-                            opacity: adjustments.includes(a.id) ? 1 : 0.6,
-                            border: adjustments.includes(a.id) ? '4px solid white' : 'none',
-                            fontSize: '1.8rem',
+                            flex: 1,
+                            backgroundColor: '#d32f2f',
+                            opacity: vol > 0 ? 1 : 0.6,
+                            border: vol > 0 ? '4px solid white' : 'none',
+                            fontSize: '2rem',
                             fontWeight: 'bold'
                         }}
-                        onClick={() => toggleAdjustment(a.id)}
+                        onClick={() => changeVol(1)}
                     >
-                        {a.label}
+                        +1
                     </button>
-                ))}
+                    <button
+                        className="cue-btn"
+                        style={{
+                            flex: 1,
+                            backgroundColor: '#1976d2',
+                            opacity: vol < 0 ? 1 : 0.6,
+                            border: vol < 0 ? '4px solid white' : 'none',
+                            fontSize: '2rem',
+                            fontWeight: 'bold'
+                        }}
+                        onClick={() => changeVol(-1)}
+                    >
+                        -1
+                    </button>
+                </div>
             </div>
 
             <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem', marginBottom: '2rem' }}>
@@ -130,7 +211,7 @@ export default function InEar() {
                 <button
                     className="cue-btn"
                     style={{ flex: 1, backgroundColor: '#2a2a2a', fontSize: '1.2rem', padding: '1rem', border: '2px solid #555' }}
-                    onClick={() => navigate('/master')}
+                    onClick={handleReturn}
                 >
                     ← 마스터 복귀
                 </button>
