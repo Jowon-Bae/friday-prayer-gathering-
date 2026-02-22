@@ -129,7 +129,6 @@ export default function Master() {
                 <input
                     type="text"
                     className="song-input"
-                    placeholder="예: 77"
                     value={songNum}
                     onChange={handleSongChange}
                     style={{ fontSize: '1.2rem', padding: '4px 8px', width: '70px' }}

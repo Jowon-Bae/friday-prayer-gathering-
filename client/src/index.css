@@ -205,22 +205,29 @@ body {
 @keyframes bpm-blink {
   0% {
     opacity: 1;
-    color: #bbf7d0;
-    text-shadow: 0 0 20px #4ade80, 0 0 40px #22c55e, 0 0 80px #16a34a, 0 0 120px #15803d;
-    transform: scale(1.1);
+    color: #86efac;
+    text-shadow: 0 0 20px #4ade80, 0 0 50px #22c55e, 0 0 100px #16a34a, 0 0 150px #15803d, 0 0 200px #16a34a;
+    transform: scale(1.15);
   }
 
-  15% {
-    opacity: 0.6;
+  35% {
+    opacity: 1;
+    color: #bbf7d0;
+    text-shadow: 0 0 10px #4ade80, 0 0 30px #22c55e;
+    transform: scale(1.05);
+  }
+
+  60% {
+    opacity: 0.7;
     color: #fff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
     transform: scale(1);
   }
 
   100% {
-    opacity: 0.6;
+    opacity: 0.7;
     color: #fff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
     transform: scale(1);
   }
 }
