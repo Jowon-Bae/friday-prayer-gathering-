@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 const isCloudflare = window.location.hostname.includes('trycloudflare.com');
@@ -39,6 +40,7 @@ const modifiers = [
 ];
 
 export default function Master() {
+    const navigate = useNavigate();
     const [bpm, setBpm] = useState(70); // default to 70
     const [activeSection, setActiveSection] = useState('');
     const [activeKey, setActiveKey] = useState('');
@@ -220,6 +222,24 @@ export default function Master() {
                         {mod.label}
                     </button>
                 ))}
+
+                <div className="cue-divider"></div>
+
+                <div style={{ gridColumn: '1 / -1', marginTop: '10px' }}>
+                    <button
+                        className="cue-btn"
+                        style={{
+                            backgroundColor: '#2a2a2a',
+                            width: '100%',
+                            fontSize: '1.5rem',
+                            padding: '1.5rem',
+                            border: '2px solid #444',
+                        }}
+                        onClick={() => navigate('/inear')}
+                    >
+                        인이어 조정 (In-Ear Control)
+                    </button>
+                </div>
             </div>
         </div>
     );

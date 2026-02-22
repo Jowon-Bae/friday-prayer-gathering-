@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Master from './pages/Master';
 import Member from './pages/Member';
+import InEar from './pages/InEar';
 import SplashScreen from './components/SplashScreen';
 import './index.css';
 
@@ -16,6 +17,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/master" element={<Master />} />
                     <Route path="/member" element={<Member />} />
+                    <Route path="/inear" element={<InEar />} />
                 </Routes>
             </BrowserRouter>
         </>
