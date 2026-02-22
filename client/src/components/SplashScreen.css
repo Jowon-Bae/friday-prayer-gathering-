@@ -26,9 +26,9 @@
 }
 
 .splash-logo {
-    width: 54px;
-    /* Reduced to 60% of previous 90px size */
-    height: auto;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
     /* Spin 2 times in 3 seconds (slower rotation) */
     animation: spinTwoTimes 3s ease-in-out forwards;
     /* Add invert(1) to make original black logo white for dark mode */
