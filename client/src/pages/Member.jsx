@@ -152,7 +152,7 @@ export default function Member() {
                 </div>
             )}
 
-            <div className="member-label" style={{ marginTop: '2rem', fontSize: '5vw' }}>BPM</div>
+            <div className="member-label" style={{ marginTop: '0.5rem', fontSize: '5vw' }}>BPM</div>
             <div
                 className="member-bpm"
                 style={state.is_playing ? { animation: `bpm-blink ${60 / state.current_bpm}s infinite` } : {}}
