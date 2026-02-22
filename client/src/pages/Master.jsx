@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { songMap } from '../utils/songMap';
 
 const isCloudflare = window.location.hostname.includes('trycloudflare.com');
 const serverUrl = import.meta.env.PROD ? '' : (isCloudflare
@@ -134,6 +135,11 @@ export default function Master() {
                     value={songNum}
                     onChange={handleSongChange}
                 />
+                {songMap[songNum] && (
+                    <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white', marginLeft: '10px' }}>
+                        {songMap[songNum]}
+                    </span>
+                )}
             </div>
 
             <div className="tempo-control">

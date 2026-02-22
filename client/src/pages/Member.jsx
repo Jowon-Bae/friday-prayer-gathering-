@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
+import { songMap } from '../utils/songMap';
 
 const isCloudflare = window.location.hostname.includes('trycloudflare.com');
 const serverUrl = import.meta.env.PROD ? '' : (isCloudflare
@@ -99,6 +100,11 @@ export default function Member() {
                 <div className="member-song">
                     <span className="member-song-label">SONG NO.</span>
                     <span className="member-song-number">{state.current_song}</span>
+                    {songMap[state.current_song] && (
+                        <span style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#fff', marginTop: '10px' }}>
+                            {songMap[state.current_song]}
+                        </span>
+                    )}
                 </div>
             )}
 
@@ -120,7 +126,7 @@ export default function Member() {
                             <div style={{ fontSize: '1.6rem', fontWeight: 'bold', marginBottom: '10px', color: 'white' }}>제 인이어에</div>
                             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '5px' }}>
                                 {state.current_inear_targets.map(tId => (
-                                    <div key={tId} className="member-cue" style={{ backgroundColor: '#2a2a2a', fontSize: '1.8rem', padding: '0.8rem 1.5rem', margin: '0' }}>
+                                    <div key={tId} className="member-cue" style={{ backgroundColor: 'transparent', color: '#111', fontSize: '2.5rem', padding: '0.2rem 1rem', margin: '0' }}>
                                         {inearTargetMap[tId] || tId}
                                     </div>
                                 ))}
@@ -131,7 +137,7 @@ export default function Member() {
 
                     {hasInEarAdj && (
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <div className="member-cue" style={{ backgroundColor: state.current_inear_vol > 0 ? '#d32f2f' : '#1976d2', fontSize: '2.5rem', padding: '1rem 2rem', margin: '0 0 10px 0' }}>
+                            <div className="member-cue" style={{ backgroundColor: 'transparent', color: state.current_inear_vol > 0 ? '#d32f2f' : '#1976d2', fontSize: '3.5rem', padding: '0.2rem 1rem', margin: '0 0 10px 0' }}>
                                 {state.current_inear_vol > 0 ? `+${state.current_inear_vol}` : state.current_inear_vol}
                             </div>
                             <div style={{ fontSize: '1.6rem', fontWeight: 'bold', color: 'white' }}>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { songMap } from '../utils/songMap';
 
 const isCloudflare = window.location.hostname.includes('trycloudflare.com');
 const serverUrl = import.meta.env.PROD ? '' : (isCloudflare
@@ -122,7 +123,14 @@ export default function InEar() {
                 <div style={{ position: 'absolute', top: '-10px', left: '10px', backgroundColor: '#333', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>화면 미리보기</div>
 
                 {memberState.current_song && (
-                    <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', opacity: 0.8 }}>SONG NO. {memberState.current_song}</div>
+                    <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', opacity: 0.8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <div>SONG NO. {memberState.current_song}</div>
+                        {songMap[memberState.current_song] && (
+                            <div style={{ fontSize: '1rem', fontWeight: 'bold', color: 'white', marginTop: '3px' }}>
+                                {songMap[memberState.current_song]}
+                            </div>
+                        )}
+                    </div>
                 )}
 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', marginTop: '10px' }}>
@@ -143,7 +151,7 @@ export default function InEar() {
                                 <div style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '5px', color: 'white' }}>제 인이어에</div>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '5px' }}>
                                     {targets.map(tId => (
-                                        <div key={tId} style={{ backgroundColor: '#2a2a2a', padding: '5px 10px', borderRadius: '4px', fontSize: '1.2rem', fontWeight: 'bold' }}>
+                                        <div key={tId} style={{ backgroundColor: 'transparent', color: '#111', padding: '0', borderRadius: '4px', fontSize: '1.5rem', fontWeight: 'bold' }}>
                                             {inearTargetMap[tId] || tId}
                                         </div>
                                     ))}
@@ -154,7 +162,7 @@ export default function InEar() {
 
                         {hasInEarAdj && (
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <div style={{ backgroundColor: vol > 0 ? '#d32f2f' : '#1976d2', padding: '8px 10px', borderRadius: '4px', fontSize: '1.5rem', fontWeight: 'bold', display: 'inline-block', marginBottom: '5px' }}>
+                                <div style={{ backgroundColor: 'transparent', color: vol > 0 ? '#d32f2f' : '#1976d2', padding: '0', borderRadius: '4px', fontSize: '2rem', fontWeight: 'bold', display: 'inline-block', marginBottom: '5px' }}>
                                     {vol > 0 ? `+${vol}` : vol}
                                 </div>
                                 <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'white' }}>
