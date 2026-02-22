@@ -97,8 +97,11 @@ export default function Master() {
     };
 
     const selectSection = (cue, color) => {
-        setActiveSection(cue);
-        socket.emit('update_state', { current_cue: cue, current_color: color });
+        // Toggle off if already selected, otherwise turn on
+        const newCue = activeSection === cue ? 'WAIT' : cue;
+        const newColor = activeSection === cue ? '#121212' : color;
+        setActiveSection(newCue);
+        socket.emit('update_state', { current_cue: newCue, current_color: newColor });
     };
 
     const selectKey = (keyId) => {
