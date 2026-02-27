@@ -116,6 +116,28 @@ io.on('connection', (socket) => {
         io.emit('chat_message', message);
     });
 
+    // Listen for delete requests
+    socket.on('delete_chat', (msgId) => {
+        const msgIndex = chatHistory.findIndex(m => m.id === msgId);
+        if (msgIndex !== -1) {
+            const msg = chatHistory[msgIndex];
+            // If it has a file, let's delete it
+            if (msg.fileUrl) {
+                const filename = msg.fileUrl.split('/').pop();
+                const filepath = path.join(uploadsDir, filename);
+                if (fs.existsSync(filepath)) {
+                    try {
+                        fs.unlinkSync(filepath);
+                    } catch (err) {
+                        console.error('Error deleting file:', err);
+                    }
+                }
+            }
+            chatHistory.splice(msgIndex, 1);
+            io.emit('chat_deleted', msgId);
+        }
+    });
+
     socket.on('disconnect', () => {
         console.log('Client disconnected:', socket.id);
     });

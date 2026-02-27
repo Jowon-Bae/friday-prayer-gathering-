@@ -238,21 +238,47 @@
     border-radius: 8px;
     object-fit: cover;
     display: block;
+    margin-bottom: 8px;
 }
 
-.chat-file-link {
+.chat-file-info {
     display: flex;
     align-items: center;
     color: #fff;
-    text-decoration: none;
     background-color: rgba(0, 0, 0, 0.2);
     padding: 8px 12px;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 8px;
 }
 
-.chat-file-link:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+.chat-attachment-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.chat-action-btn {
+    flex: 1;
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    display: inline-block;
+}
+
+.chat-action-btn.download-btn {
+    background-color: #10b981;
+    color: white;
+}
+
+.chat-action-btn.delete-btn {
+    background-color: #ef4444;
+    color: white;
 }
 
 .truncate {

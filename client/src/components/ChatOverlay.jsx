@@ -24,12 +24,18 @@ export default function ChatOverlay({ socket, role }) {
             }
         };
 
+        const handleDelete = (msgId) => {
+            setMessages(prev => prev.filter(m => m.id !== msgId));
+        };
+
         socket.on('chat_history', handleHistory);
         socket.on('chat_message', handleNewMessage);
+        socket.on('chat_deleted', handleDelete);
 
         return () => {
             socket.off('chat_history', handleHistory);
             socket.off('chat_message', handleNewMessage);
+            socket.off('chat_deleted', handleDelete);
         };
     }, [socket, isOpen]);
 
@@ -109,6 +115,12 @@ export default function ChatOverlay({ socket, role }) {
         }
     };
 
+    const deleteMessage = (msgId) => {
+        if (window.confirm('정말 이 메시지(파일)를 삭제하시겠습니까?')) {
+            socket.emit('delete_chat', msgId);
+        }
+    };
+
     // Use formatting for display based on timestamp
     const formatTime = (isoString) => {
         const d = new Date(isoString);
@@ -157,11 +169,23 @@ export default function ChatOverlay({ socket, role }) {
                                                             <img src={msg.fileUrl} alt={msg.fileName} className="chat-image-preview" />
                                                         </a>
                                                     ) : (
-                                                        <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer" className="chat-file-link">
+                                                        <div className="chat-file-info">
                                                             <span style={{ fontSize: '1.2rem', marginRight: '6px' }}>📄</span>
                                                             <span className="truncate">{msg.fileName}</span>
-                                                        </a>
+                                                        </div>
                                                     )}
+
+                                                    <div className="chat-attachment-actions">
+                                                        <a href={msg.fileUrl} download={msg.fileName} target="_blank" rel="noopener noreferrer" className="chat-action-btn download-btn">
+                                                            ⬇️ 다운로드
+                                                        </a>
+                                                        {isMe && (
+                                                            <button onClick={() => deleteMessage(msg.id)} className="chat-action-btn delete-btn">
+                                                                🗑️ 취소/삭제
+                                                            </button>
+                                                        )}
+                                                    </div>
+
                                                     {msg.text && <div style={{ marginTop: '8px' }}>{msg.text}</div>}
                                                 </div>
                                             ) : (
