@@ -105,7 +105,7 @@ export default function InEar() {
     const isFlat = memberState.current_modifiers && memberState.current_modifiers.includes('FLAT');
     const isSharp = memberState.current_modifiers && memberState.current_modifiers.includes('SHARP');
     const displayKey = baseKey ? (isFlat ? baseKey.replace(' key', 'b key') : (isSharp ? baseKey.replace(' key', '# key') : baseKey)) : '';
-    const hasModifiers = memberState.current_modifiers && memberState.current_modifiers.length > 0;
+    const hasModifiers = memberState.current_modifiers && memberState.current_modifiers.filter(m => m !== 'FLAT' && m !== 'SHARP').length > 0;
     const isWaiting = !displayCue && !displayKey && !hasModifiers;
 
     const inearTargetMap = { 'WL': '예배인도자', 'CLICK': '클릭', 'SINGER': '싱어', 'PRAY': '기도인도자', 'PREACH': '설교자', 'KEYMAIN': '메인 건반', 'KEY21': '세컨1 건반', 'KEY22': '세컨2 건반', 'DRUM': '드럼', 'BASS': '베이스', 'ELEC': '일렉' };
@@ -149,7 +149,7 @@ export default function InEar() {
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', marginTop: '10px' }}>
                     {displayKey && <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{displayKey}</div>}
                     {displayCue && <div style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>{displayCue}</div>}
-                    {hasModifiers && memberState.current_modifiers.map(mod => (
+                    {hasModifiers && memberState.current_modifiers.filter(m => m !== 'FLAT' && m !== 'SHARP').map(mod => (
                         <div key={mod} style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#ffeb3b' }}>{modifierLabelMap[mod] || mod}</div>
                     ))}
                     {isWaiting && <div style={{ fontSize: '1.2rem', opacity: 0.6 }}>WAIT</div>}

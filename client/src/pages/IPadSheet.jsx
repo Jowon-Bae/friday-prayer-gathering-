@@ -224,7 +224,7 @@ export default function IPadSheet() {
         'KEYUP': 'Key up'
     };
 
-    const hasModifiers = state.current_modifiers && state.current_modifiers.length > 0;
+    const hasModifiers = state.current_modifiers && state.current_modifiers.filter(m => m !== 'FLAT' && m !== 'SHARP').length > 0;
     const hasInEarTargets = state.current_inear_targets && state.current_inear_targets.length > 0;
     const hasInEarAdj = state.current_inear_vol !== 0 && state.current_inear_vol !== undefined;
     const imageUrl = activeSong && !imgError ? `/sheets/${activeSong}.jpg` : null;
@@ -511,7 +511,7 @@ export default function IPadSheet() {
                         {displayKey && <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#fff', backgroundColor: keyColorMap[state.current_key] || 'rgba(255,255,255,0.2)', padding: '6px 16px', borderRadius: '10px', marginBottom: '12px', textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>{displayKey}</div>}
                         {displayCue && <div style={{ fontSize: '3.5rem', fontWeight: '900', color: activeCueColor, textShadow: '0 4px 10px rgba(0,0,0,0.5)', marginBottom: '12px' }}>{displayCue}</div>}
                         
-                        {hasModifiers && state.current_modifiers.map(mod => (
+                        {hasModifiers && state.current_modifiers.filter(m => m !== 'FLAT' && m !== 'SHARP').map(mod => (
                             <div key={mod} style={{ fontSize: '2.2rem', fontWeight: '900', color: '#eab308', textShadow: '0 4px 10px rgba(0,0,0,0.5)', marginBottom: '8px', animation: 'flash-text-blink 0.882s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}>
                                 {modifierLabelMap[mod] || mod}
                             </div>

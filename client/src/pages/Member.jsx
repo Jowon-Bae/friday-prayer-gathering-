@@ -139,7 +139,7 @@ export default function Member() {
         'KEYUP': 'Key up'
     };
 
-    const hasModifiers = state.current_modifiers && state.current_modifiers.length > 0;
+    const hasModifiers = state.current_modifiers && state.current_modifiers.filter(m => m !== 'FLAT' && m !== 'SHARP').length > 0;
     const hasInEarTargets = state.current_inear_targets && state.current_inear_targets.length > 0;
     const hasInEarAdj = state.current_inear_vol !== 0;
     const isWaiting = !displayCue && !displayKey && !hasModifiers;
@@ -195,7 +195,7 @@ export default function Member() {
             <div className="member-cues-container">
                 {displayKey && <div className="member-cue">{displayKey}</div>}
                 {displayCue && <div className="member-cue">{displayCue}</div>}
-                {hasModifiers && state.current_modifiers.map(mod => (
+                {hasModifiers && state.current_modifiers.filter(m => m !== 'FLAT' && m !== 'SHARP').map(mod => (
                     <div key={mod} className="member-cue" style={{ textShadow: '0 4px 10px rgba(0,0,0,0.5)', animation: 'flash-text-blink 0.882s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}>{modifierLabelMap[mod] || mod}</div>
                 ))}
                 {isWaiting && <div className="member-cue">WAIT</div>}
