@@ -103,7 +103,8 @@ export default function InEar() {
     const displayCue = memberState.current_cue && memberState.current_cue !== 'WAIT' ? (cueLabelMap[memberState.current_cue] || memberState.current_cue) : '';
     const baseKey = memberState.current_key ? (cueLabelMap[memberState.current_key] || memberState.current_key) : '';
     const isFlat = memberState.current_modifiers && memberState.current_modifiers.includes('FLAT');
-    const displayKey = baseKey ? (isFlat ? baseKey.replace(' key', 'b key') : baseKey) : '';
+    const isSharp = memberState.current_modifiers && memberState.current_modifiers.includes('SHARP');
+    const displayKey = baseKey ? (isFlat ? baseKey.replace(' key', 'b key') : (isSharp ? baseKey.replace(' key', '# key') : baseKey)) : '';
     const hasModifiers = memberState.current_modifiers && memberState.current_modifiers.length > 0;
     const isWaiting = !displayCue && !displayKey && !hasModifiers;
 

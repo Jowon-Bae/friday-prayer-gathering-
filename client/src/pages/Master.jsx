@@ -37,7 +37,6 @@ const keyCues = [
 
 // Group 3: Modifiers (Toggleable, Multiple allowed)
 const modifiers = [
-    { id: 'FLAT', label: 'b (Flat)', color: '#444' },
     { id: 'ONEMORE', label: '한 번 더', color: 'var(--color-onemore)' },
     { id: 'KEYUP', label: 'Key up', color: 'var(--color-keyup)' }
 ];
@@ -330,6 +329,39 @@ export default function Master() {
                         onClick={() => selectKey(kCue.id)}
                     >
                         {kCue.label}
+                    </button>
+                ))}
+
+                {[
+                    { id: 'FLAT', label: 'b (Flat)', color: '#444' },
+                    { id: 'SHARP', label: '# (Sharp)', color: '#444' }
+                ].map(mod => (
+                    <button
+                        key={mod.id}
+                        className={`cue-btn`}
+                        style={{
+                            backgroundColor: mod.color,
+                            opacity: activeModifiers.includes(mod.id) ? 1 : 0.6,
+                            border: activeModifiers.includes(mod.id) ? '4px solid white' : 'none',
+                            fontSize: '1.4rem',
+                            whiteSpace: 'pre-line'
+                        }}
+                        onClick={() => {
+                            setActiveModifiers(prev => {
+                                let next = prev;
+                                if (mod.id === 'FLAT') {
+                                    if (next.includes('FLAT')) next = next.filter(m => m !== 'FLAT');
+                                    else next = [...next.filter(m => m !== 'SHARP'), 'FLAT'];
+                                } else {
+                                    if (next.includes('SHARP')) next = next.filter(m => m !== 'SHARP');
+                                    else next = [...next.filter(m => m !== 'FLAT'), 'SHARP'];
+                                }
+                                socket.emit('update_state', { current_modifiers: next });
+                                return next;
+                            });
+                        }}
+                    >
+                        {mod.label}
                     </button>
                 ))}
 

@@ -167,7 +167,8 @@ export default function IPadSheet() {
 
     const baseKey = state.current_key ? (cueLabelMap[state.current_key] || state.current_key) : '';
     const isFlat = state.current_modifiers && state.current_modifiers.includes('FLAT');
-    const displayKey = baseKey ? (isFlat ? baseKey.replace(' key', 'b key') : baseKey) : '';
+    const isSharp = state.current_modifiers && state.current_modifiers.includes('SHARP');
+    const displayKey = baseKey ? (isFlat ? baseKey.replace(' key', 'b key') : (isSharp ? baseKey.replace(' key', '# key') : baseKey)) : '';
 
         useEffect(() => {
         let touchStartX = 0;
