@@ -9,6 +9,9 @@ export default function ChatOverlay({ socket, role, inline = false, onImageClick
     const [isUploading, setIsUploading] = useState(false);
     const [fullscreenImage, setFullscreenImage] = useState(null); // stores the msg object of the image
     const [dragOffset, setDragOffset] = useState(0);              // for swipe-down to dismiss
+    const [typingUsers, setTypingUsers] = useState([]);
+    const typingTimeoutRef = useRef(null);
+    const isTypingRef = useRef(false);
     const messagesEndRef = useRef(null);
     const fileInputRef = useRef(null);
     const touchStartY = useRef(0);
@@ -34,14 +37,27 @@ export default function ChatOverlay({ socket, role, inline = false, onImageClick
             setMessages(prev => prev.filter(m => m.id !== msgId));
         };
 
+        const handleUserTyping = (data) => {
+            const label = data.name ? `${data.name} (${data.role})` : data.role;
+            setTypingUsers(prev => prev.includes(label) ? prev : [...prev, label]);
+        };
+        const handleUserStoppedTyping = (data) => {
+            const label = data.name ? `${data.name} (${data.role})` : data.role;
+            setTypingUsers(prev => prev.filter(u => u !== label));
+        };
+
         socket.on('chat_history', handleHistory);
         socket.on('chat_message', handleNewMessage);
         socket.on('chat_deleted', handleDelete);
+        socket.on('user_typing', handleUserTyping);
+        socket.on('user_stopped_typing', handleUserStoppedTyping);
 
         return () => {
             socket.off('chat_history', handleHistory);
             socket.off('chat_message', handleNewMessage);
             socket.off('chat_deleted', handleDelete);
+            socket.off('user_typing', handleUserTyping);
+            socket.off('user_stopped_typing', handleUserStoppedTyping);
         };
     }, [socket, isOpen]);
 
@@ -64,11 +80,16 @@ export default function ChatOverlay({ socket, role, inline = false, onImageClick
         if (e) e.preventDefault();
         if (!inputValue.trim()) return;
 
+        const senderName = sessionStorage.getItem('confirmedName') || '익명';
         socket.emit('send_chat', {
             text: inputValue.trim(),
             role: role,
-            senderName: sessionStorage.getItem('confirmedName') || '익명'
+            senderName: senderName
         });
+        // Stop typing indicator
+        clearTimeout(typingTimeoutRef.current);
+        isTypingRef.current = false;
+        socket.emit('typing_stop', { name: senderName, role });
         setInputValue('');
     };
 
@@ -249,6 +270,14 @@ export default function ChatOverlay({ socket, role, inline = false, onImageClick
                     <div ref={messagesEndRef} />
                 </div>
 
+
+                {/* Typing indicator */}
+                {typingUsers.length > 0 && (
+                    <div style={{ padding: '4px 12px', fontSize: '0.78rem', color: '#aaa', fontStyle: 'italic', minHeight: '22px' }}>
+                        {typingUsers.join(', ')}님이 메시지를 작성 중...
+                    </div>
+                )}
+
                 <form className="chat-input-area" onSubmit={sendMessage}>
                     <button
                         type="button"
@@ -268,7 +297,19 @@ export default function ChatOverlay({ socket, role, inline = false, onImageClick
                     <input
                         type="text"
                         value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
+                        onChange={(e) => {
+                        setInputValue(e.target.value);
+                        const senderName = sessionStorage.getItem('confirmedName') || '익명';
+                        if (!isTypingRef.current) {
+                            isTypingRef.current = true;
+                            socket.emit('typing_start', { name: senderName, role });
+                        }
+                        clearTimeout(typingTimeoutRef.current);
+                        typingTimeoutRef.current = setTimeout(() => {
+                            isTypingRef.current = false;
+                            socket.emit('typing_stop', { name: senderName, role });
+                        }, 2000);
+                    }}
                         placeholder={isUploading ? "파일 업로드 중..." : "메시지를 입력하세요..."}
                         className="chat-input"
                         disabled={isUploading}

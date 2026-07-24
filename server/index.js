@@ -185,6 +185,18 @@ io.on('connection', (socket) => {
         }
     });
 
+
+    // Typing indicator events
+    socket.on('typing_start', (data) => {
+        if (!currentRoom) return;
+        socket.to(currentRoom).emit('user_typing', { name: data.name, role: data.role });
+    });
+
+    socket.on('typing_stop', (data) => {
+        if (!currentRoom) return;
+        socket.to(currentRoom).emit('user_stopped_typing', { name: data.name, role: data.role });
+    });
+
     socket.on('disconnect', () => {
         console.log('Client disconnected:', socket.id);
     });
