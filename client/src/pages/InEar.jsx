@@ -96,11 +96,14 @@ export default function InEar() {
     };
 
     // Derived values for preview
-    const cueLabelMap = { 'V1': 'Verse 1', 'V2': 'Verse 2', 'CH': 'Chorus', 'BR': 'Bridge', 'INST': 'Instrument', 'END': 'Ending', 'BR2': 'Bridge 한 번 더', 'KA': 'A key', 'KBb': 'Bb key', 'KC': 'C key', 'KD': 'D key', 'KE': 'E key', 'KF': 'F key', 'KG': 'G key' };
-    const modifierLabelMap = { 'ONEMORE': '한 번 더', 'KEYUP': 'Key up' };
+    const cueLabelMap = { 'V1': 'Verse 1', 'V2': 'Verse 2', 'CH': 'Chorus', 'BR': 'Bridge', 'INST': 'Instrument', 'END': 'Ending', 'BR2': 'Bridge 한 번 더', 'KA': 'A key', 'KB': 'B key', 'KC': 'C key', 'KD': 'D key', 'KE': 'E key', 'KF': 'F key', 'KG': 'G key' };
+    const modifierLabelMap = { 'FLAT': 'b',
+        'ONEMORE': '한 번 더', 'KEYUP': 'Key up' };
 
     const displayCue = memberState.current_cue && memberState.current_cue !== 'WAIT' ? (cueLabelMap[memberState.current_cue] || memberState.current_cue) : '';
-    const displayKey = memberState.current_key ? (cueLabelMap[memberState.current_key] || memberState.current_key) : '';
+    const baseKey = memberState.current_key ? (cueLabelMap[memberState.current_key] || memberState.current_key) : '';
+    const isFlat = memberState.current_modifiers && memberState.current_modifiers.includes('FLAT');
+    const displayKey = baseKey ? (isFlat ? baseKey.replace(' key', 'b key') : baseKey) : '';
     const hasModifiers = memberState.current_modifiers && memberState.current_modifiers.length > 0;
     const isWaiting = !displayCue && !displayKey && !hasModifiers;
 

@@ -27,7 +27,7 @@ const sections = [
 // Group 2: Musical Keys
 const keyCues = [
     { id: 'KA', label: 'A key', color: 'var(--color-key-a)' },
-    { id: 'KBb', label: 'Bb key', color: 'var(--color-key-bb)' },
+    { id: 'KB', label: 'B key', color: 'var(--color-key-bb)' },
     { id: 'KC', label: 'C key', color: 'var(--color-key-c)' },
     { id: 'KD', label: 'D key', color: 'var(--color-key-d)' },
     { id: 'KE', label: 'E key', color: 'var(--color-key-e)' },
@@ -37,6 +37,7 @@ const keyCues = [
 
 // Group 3: Modifiers (Toggleable, Multiple allowed)
 const modifiers = [
+    { id: 'FLAT', label: 'b (Flat)', color: '#444' },
     { id: 'ONEMORE', label: '한 번 더', color: 'var(--color-onemore)' },
     { id: 'KEYUP', label: 'Key up', color: 'var(--color-keyup)' }
 ];

@@ -25,7 +25,7 @@ const cueLabelMap = {
     'END': 'Ending',
     'BR2': 'Bridge 한 번 더',
     'KA': 'A key',
-    'KBb': 'Bb key',
+    'KB': 'B key',
     'KC': 'C key',
     'KD': 'D key',
     'KE': 'E key',
@@ -165,9 +165,9 @@ export default function IPadSheet() {
         ? (cueLabelMap[state.current_cue] || state.current_cue)
         : '';
 
-    const displayKey = state.current_key
-        ? (cueLabelMap[state.current_key] || state.current_key)
-        : '';
+    const baseKey = state.current_key ? (cueLabelMap[state.current_key] || state.current_key) : '';
+    const isFlat = state.current_modifiers && state.current_modifiers.includes('FLAT');
+    const displayKey = baseKey ? (isFlat ? baseKey.replace(' key', 'b key') : baseKey) : '';
 
         useEffect(() => {
         let touchStartX = 0;
@@ -209,7 +209,7 @@ export default function IPadSheet() {
 
     const keyColorMap = {
         'KA': 'var(--color-key-a)',
-        'KBb': 'var(--color-key-bb)',
+        'KB': 'var(--color-key-bb)',
         'KC': 'var(--color-key-c)',
         'KD': 'var(--color-key-d)',
         'KE': 'var(--color-key-e)',
@@ -218,6 +218,7 @@ export default function IPadSheet() {
     };
     
     const modifierLabelMap = {
+        'FLAT': 'b',
         'ONEMORE': '한 번 더',
         'KEYUP': 'Key up'
     };

@@ -23,7 +23,7 @@ const cueLabelMap = {
     'END': 'Ending',
     'BR2': 'Bridge 한 번 더',
     'KA': 'A key',
-    'KBb': 'Bb key',
+    'KB': 'B key',
     'KC': 'C key',
     'KD': 'D key',
     'KE': 'E key',
@@ -128,11 +128,12 @@ export default function Member() {
         ? (cueLabelMap[state.current_cue] || state.current_cue)
         : '';
 
-    const displayKey = state.current_key
-        ? (cueLabelMap[state.current_key] || state.current_key)
-        : '';
+    const baseKey = state.current_key ? (cueLabelMap[state.current_key] || state.current_key) : '';
+    const isFlat = state.current_modifiers && state.current_modifiers.includes('FLAT');
+    const displayKey = baseKey ? (isFlat ? baseKey.replace(' key', 'b key') : baseKey) : '';
 
     const modifierLabelMap = {
+        'FLAT': 'b',
         'ONEMORE': '한 번 더',
         'KEYUP': 'Key up'
     };
